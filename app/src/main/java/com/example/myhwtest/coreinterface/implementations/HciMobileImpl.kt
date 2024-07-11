@@ -11,10 +11,10 @@ abstract class HciMobileImpl : HclMobileInterface {
     override fun imei(): String? {
         var imei = sharedPrefs.getString("IMEI")
 
-        if (imei.isNullOrEmpty() || imei == "unknown") {
+        if (imei.isNullOrEmpty()) {
             imei = platformImei()
 
-            if (!imei.isNullOrEmpty() && imei != "unknown") {
+            if (!imei.isNullOrEmpty()) {
                 sharedPrefs.putString("IMEI", imei)
             }
         }

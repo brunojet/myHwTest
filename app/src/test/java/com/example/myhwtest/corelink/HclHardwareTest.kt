@@ -18,6 +18,7 @@ import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import java.util.stream.Stream
+import kotlin.test.assertFailsWith
 
 class HclHardwareTest {
     private val context = mock(Context::class.java)
@@ -114,6 +115,17 @@ class HclHardwareTest {
             initializeMocks(null, macAddress)
             var hclHardware = HclHardware()
             assertEquals(macAddress, hclHardware.serialNumber())
+            after()
+        }
+    }
+
+    @Test
+    fun `serialNumber throws exception when neither IMEI nor MAC address are available`() {
+        models.forEach { modelName ->
+            before(modelName)
+            initializeMocks(null, null)
+            var hclHardware = HclHardware()
+            assertFailsWith<Exception> { hclHardware.serialNumber() }
             after()
         }
     }
