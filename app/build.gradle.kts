@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myhwtest"
-        minSdk = 24
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -59,7 +59,16 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    implementation(libs.io.insert.koin.core)
+    implementation(libs.io.insert.koin.android)
+
     testImplementation(libs.junit)
+
+    testImplementation(libs.org.mockito.mockito.core) // Mockito for mocking
+    testImplementation(libs.io.insert.koin.koin.test)
+    testImplementation(libs.org.mockito.mockito.inline)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
