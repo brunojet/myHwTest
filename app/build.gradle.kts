@@ -68,6 +68,7 @@ dependencies {
     testImplementation(libs.org.mockito.mockito.core) // Mockito for mocking
     testImplementation(libs.io.insert.koin.koin.test)
     testImplementation(libs.org.mockito.mockito.inline)
+    testImplementation(libs.org.junit.jupiter.junit.jupiter.params)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -14,20 +14,16 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import java.util.stream.Stream
 
 class HclWifiTest : KoinTest {
-    private lateinit var context: Context
-    private lateinit var hclHardware: HclHardware
-    private lateinit var wifiManager: WifiManager
-    private lateinit var wifiInfo: WifiInfo
+    private val context = mock(Context::class.java)
+    private val hclHardware = mock(HclHardware::class.java)
+    private val wifiManager = mock(WifiManager::class.java)
+    private val wifiInfo = mock(WifiInfo::class.java)
+    private val models = Stream.of("Smart", "GPOS700", "L400")
 
-
-    @Before
-    fun before() {
-        wifiManager = mock(WifiManager::class.java)
-        wifiInfo = mock(WifiInfo::class.java)
-        context = mock(Context::class.java)
-        hclHardware = mock(HclHardware::class.java)
+    private fun begin(model: String) {
 
         `when`(context.checkSelfPermission(android.Manifest.permission.ACCESS_WIFI_STATE)).thenReturn(
             android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -36,14 +32,13 @@ class HclWifiTest : KoinTest {
         startKoin {
             modules(module {
                 single { context }
-                single(named("modelName")) { "Smart" }
+                single(named("modelName")) { model }
                 single { hclHardware }
             })
         }
     }
 
-    @After
-    fun after() {
+    private fun end() {
         stopKoin()
     }
 
@@ -56,8 +51,12 @@ class HclWifiTest : KoinTest {
 
     @Test
     fun `macAddress returns expected value`() {
-        initializeMocks("00:11:22:33:44:55")
-        val hclWifi = HclWifi()
-        assertEquals("00:11:22:33:44:55", hclWifi.macAddress())
+        models.forEach { model ->
+            begin(model)
+            val hclWifi = HclWifi()
+            initializeMocks("00:11:22:33:44:55")
+            assertEquals("00:11:22:33:44:55", hclWifi.macAddress())
+            end()
+        }
     }
 }

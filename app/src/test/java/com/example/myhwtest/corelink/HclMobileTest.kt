@@ -17,20 +17,16 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import java.util.stream.Stream
 
 class HclMobileTest : KoinTest {
-    private lateinit var context: Context
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
-    private lateinit var telephonyManager: TelephonyManager
+    private val context = mock(Context::class.java)
+    private val sharedPreferences = mock(SharedPreferences::class.java)
+    private val editor = mock(SharedPreferences.Editor::class.java)
+    private val telephonyManager = mock(TelephonyManager::class.java)
+    private val models = Stream.of("Smart", "GPOS700", "L400")
 
-    @Before
-    fun before() {
-        context = mock(Context::class.java)
-        sharedPreferences = mock(SharedPreferences::class.java)
-        editor = mock(SharedPreferences.Editor::class.java)
-        telephonyManager = mock(TelephonyManager::class.java)
-
+    private fun before(modelName: String) {
         `when`(context.getSharedPreferences(anyString(), eq(Context.MODE_PRIVATE))).thenReturn(
             sharedPreferences
         )
@@ -45,13 +41,12 @@ class HclMobileTest : KoinTest {
         startKoin {
             modules(module {
                 single { context }
-                single(named("modelName")) { "Smart" }
+                single(named("modelName")) { modelName }
             })
         }
     }
 
-    @After
-    fun after() {
+    private fun after() {
         stopKoin()
     }
 
@@ -64,9 +59,12 @@ class HclMobileTest : KoinTest {
 
     @Test
     fun `imei returns expected value`() {
-        val imei = "123456789";
-        val hclMobile = HclMobile()
-        initializeMocks(imei);
-        assertEquals(imei, hclMobile.imei())
+        models.forEach { model ->
+            before(model)
+            val hclMobile = HclMobile()
+            initializeMocks("123456789")
+            assertEquals("123456789", hclMobile.imei())
+            after()
+        }
     }
 }

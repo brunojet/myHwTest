@@ -16,7 +16,7 @@ class HclSharedPrefs(sharedName: String) : HclSharedPrefsInterface, KoinComponen
     }
 
     override fun getString(key: String): String? {
-        return sharedPref.getString(key, "unknown").toString()
+        return sharedPref.getString(key, null)
     }
 
     override fun putString(key: String, value: String) {
