@@ -77,3 +77,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+tasks.withType<JacocoReport> {
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.map {
+            fileTree(mapOf("dir" to it, "excludes" to listOf("**/apidependent/**")))
+        }))
+    }
+}

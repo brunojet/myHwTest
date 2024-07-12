@@ -2,10 +2,9 @@ package com.example.myhwtest.corelink
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.telephony.TelephonyManager
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -15,9 +14,10 @@ import org.koin.test.KoinTest
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import java.util.stream.Stream
+import kotlin.test.assertEquals
 
 class HclMobileTest : KoinTest {
     private val context = mock(Context::class.java)
@@ -34,8 +34,8 @@ class HclMobileTest : KoinTest {
         `when`(editor.putString(anyString(), anyString())).thenReturn(editor)
         `when`(editor.apply()).then { }
         `when`(context.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(telephonyManager)
-        `when`(context.checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE)).thenReturn(
-            android.content.pm.PackageManager.PERMISSION_GRANTED
+        `when`(context.checkSelfPermission(anyString())).thenReturn(
+            PackageManager.PERMISSION_GRANTED
         )
 
         startKoin {
@@ -50,12 +50,12 @@ class HclMobileTest : KoinTest {
         stopKoin()
     }
 
+    @Suppress("DEPRECATION")
     private fun initializeMocks(imei: String) {
-        `when`(sharedPreferences.getString(eq("IMEI"), any())).thenReturn(imei)
+        `when`(sharedPreferences.getString(eq("IMEI"), any())).thenReturn(null)
         `when`(telephonyManager.getImei(0)).thenReturn(imei)
         `when`(telephonyManager.deviceId).thenReturn(imei)
     }
-
 
     @Test
     fun `imei returns expected value`() {
