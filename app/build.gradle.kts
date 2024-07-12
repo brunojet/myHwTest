@@ -62,13 +62,13 @@ dependencies {
 
     implementation(libs.io.insert.koin.core)
     implementation(libs.io.insert.koin.android)
+    implementation(libs.androidx.ui.test.junit4.android)
 
     testImplementation(libs.junit)
 
-    testImplementation(libs.org.mockito.mockito.core) // Mockito for mocking
     testImplementation(libs.io.insert.koin.koin.test)
+    testImplementation(libs.org.mockito.mockito.core) // Mockito for mocking
     testImplementation(libs.org.mockito.mockito.inline)
-    testImplementation(libs.org.junit.jupiter.junit.jupiter.params)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
